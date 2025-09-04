@@ -1,0 +1,89 @@
+/* Box for displaying messages above the chat box */
+.messages-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 70px); /* Adjust height to leave space for chat box */
+    overflow-y: auto;
+    background: rgba(23, 42, 58, 0.95);
+    color: var(--color-daue);
+    padding: 30px 20px 100px 20px;
+    box-sizing: border-box;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+:root {
+    --color-primary: #74B3CE;
+    --color-secondary: #09BC8A;
+    --color-base: #172A3A;
+    --color-green: #004346;
+    --color-daue: #508991;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--color-base);
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.chat-box {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 80%;
+    background: transparent;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+
+.chat-input {
+    flex: 4;
+    max-width: 800px;
+    min-width: 00px;
+    width: 75%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    background-color: #354552;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.chat-input:focus-within {
+    background: #465b6d;
+    transition: background 0.2s;
+}
+
+.chat-send {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: #007bff;
+    border: none;
+    border-radius: 5px;
+    transition: background 0.2s;
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    position: relative;
+}
+
+.chat-send svg {
+    display: block;
+    stroke: white;
+}
+
+.chat-send:hover {
+    background: #50a4ff;
+}

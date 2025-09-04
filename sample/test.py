@@ -22,56 +22,96 @@ deployment = os.getenv("DEPLOYMENT_NAME", "gpt-4")
 subscription_key = os.getenv("AZURE_OPENAI_API_KEY", "8cnqswydw7fmj6cBdRTh27JJmWsydcaPpn12eTlGjjA8qSA8tVluJQQJ99BIACYeBjFXJ3w3AAABACOGAhvi")
 api_version = "2025-01-01-preview"
 
+# 会話の最大ターン数
+MAX_TURNS = 15
+
+# ルートURL ("/") にアクセスがあった場合に index.html を返す
+@app.route("/")
+def root():
+    return send_from_directory('.', 'index.html')
+
+# CSSやJavaScriptなどの静的ファイルを配信するためのルートを追加
+@app.route('/<path:filename>')
+def serve_static(filename):
+    return send_from_directory('.', filename)
+
+
+# フロントエンドからのチャットリクエストを処理するAPIエンドポイント
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    data = request.get_json()
-    user_message = data.get('message', '')
-    # 直近の会話履歴を受け取る場合は data.get('history', []) などで拡張可
-    messages = [
-        {
-            "role": "system",
-            "content": [
-                {"type": "text", "text": "あなたはユーザーのMBTI診断を会話から推測するAIアシスタントです。質問を通じてユーザーの性格を分析し、最後にMBTIタイプを推定してください。"}
-            ]
-        },
-        {
-            "role": "user",
-            "content": [
-                {"type": "text", "text": user_message}
-            ]
-        }
-    ]
-    url = f"{endpoint}/openai/deployments/{deployment}/chat/completions?api-version={api_version}"
-    headers = {
-        "Content-Type": "application/json",
-        "api-key": subscription_key
-    }
-    payload = {
-        "messages": messages,
-        "max_tokens": 1024,
-        "temperature": 0.7,
-        "top_p": 0.95,
-        "frequency_penalty": 0,
-        "presence_penalty": 0,
-        "stop": None,
-        "stream": False
-    }
     try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Invalid JSON"}), 400
+
+        user_mbti = data.get('mbti', '不明')
+        history = data.get('history', [])
+        turn_count = data.get('turn', 0)
+
+        # AIへの指示（システムプロンプト）を修正
+        system_prompt = f"""
+        あなたはユーザーの楽しい雑談相手です。自然な会話を心がけてください。
+        あくまで雑談の相手です．趣味やはまっていること，愚痴や相談などの相手になってください．
+        会話の中で、ユーザーの性格や考え方についてさりげなく探りを入れてください。診断しているような雰囲気は出さず、あくまで友人との会話のように振る舞ってください。
+        ユーザーからMBTIに関する質問があった場合は、以下の公式サイトを参考に正確な情報を提供してください。
+        - https://www.mbti.or.jp/what/
+        - https://www.16personalities.com/ja/
+        """
+
+        messages = [{"role": "system", "content": system_prompt}]
+        messages.extend(history)
+
+        # 最終ターンの場合、診断結果を生成するように指示を追加
+        if turn_count >= MAX_TURNS:
+            final_instruction = f"""
+            これまでの会話履歴をすべて分析してください。
+            ユーザーが最初に申告したMBTIタイプは「{user_mbti}」です。
+            会話全体から判断して、ユーザーの最も可能性の高い「真のMBTIタイプ」を1つだけ特定してください。
+            次に、なぜそのタイプだと判断したのか、具体的な会話の内容を引用しながら、申告されたタイプと比較しつつ、日本語で簡潔に自然な口調で説明してください。
+            最後に「会話した感じだと、あなたの本当のタイプは〇〇かもね！」というように結論を述べてください。
+            以下のJSON形式で、他のテキストは一切含めずに回答してください:
+            {{
+              "estimated_mbti": "推定したMBTIタイプ",
+              "reasoning": "友人として語りかけるような自然な口調での判断理由"
+            }}
+            """
+            messages.append({"role": "user", "content": final_instruction})
+            
+            # 最終ターンでは response_format を json_object に指定
+            payload = {
+                "messages": messages, "max_tokens": 2048, "temperature": 0.5,
+                "response_format": {"type": "json_object"}
+            }
+        else:
+            # 会話の途中は通常のテキスト応答
+             payload = {
+                "messages": messages, "max_tokens": 1024, "temperature": 0.7,
+                "top_p": 0.95, "stop": None, "stream": False
+            }
+
+        # Azure OpenAI APIを呼び出し
+        url = f"{endpoint}/openai/deployments/{deployment}/chat/completions?api-version={api_version}"
+        headers = {"Content-Type": "application/json", "api-key": subscription_key}
+        
         response = requests.post(url, headers=headers, data=json.dumps(payload))
         response.raise_for_status()
         result = response.json()
-        # contentがリストか文字列かで分岐
-        content = result["choices"][0]["message"]["content"]
-        if isinstance(content, list):
-            # OpenAIの新API仕様（list of dict）
-            ai_message = "".join([c.get("text", "") for c in content])
+
+        if turn_count >= MAX_TURNS:
+            # 最終ターンの場合、AIからのJSON応答をそのままフロントエンドに返す
+            analysis_result = json.loads(result["choices"][0]["message"]["content"])
+            return jsonify({"is_final": True, "result": analysis_result})
         else:
-            # 旧仕様（string）
-            ai_message = content
-        return jsonify({"reply": ai_message})
+            # 会話途中の場合、テキスト応答を返す
+            ai_message = result["choices"][0]["message"]["content"]
+            return jsonify({"is_final": False, "reply": ai_message})
+
+    except requests.exceptions.RequestException as e:
+        print(f"API request error: {e}")
+        return jsonify({"error": "API request failed."}), 502
     except Exception as e:
-        return jsonify({"reply": f"エラーが発生しました: {str(e)}"}), 500
+        print(f"An unexpected error occurred: {e}")
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-    

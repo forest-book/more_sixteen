@@ -60,7 +60,14 @@ def chat():
         response = requests.post(url, headers=headers, data=json.dumps(payload))
         response.raise_for_status()
         result = response.json()
-        ai_message = result["choices"][0]["message"]["content"][0]["text"]
+        # contentがリストか文字列かで分岐
+        content = result["choices"][0]["message"]["content"]
+        if isinstance(content, list):
+            # OpenAIの新API仕様（list of dict）
+            ai_message = "".join([c.get("text", "") for c in content])
+        else:
+            # 旧仕様（string）
+            ai_message = content
         return jsonify({"reply": ai_message})
     except Exception as e:
         return jsonify({"reply": f"エラーが発生しました: {str(e)}"}), 500

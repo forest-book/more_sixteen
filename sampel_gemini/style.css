@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+:root {
+    --primary-color: #4a6fa5;
+    --secondary-color: #166088;
+    --background-color: #f0f4f8;
+    --card-background: #ffffff;
+    --text-color: #333;
+    --light-text-color: #f8f9fa;
+    --user-message-bg: #e3f2fd;
+    --bot-message-bg: #f1f1f1;
+    --border-color: #dbe2ef;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    color: var(--text-color);
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+}
+
+.card {
+    background: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+/* --- MBTI選択画面 --- */
+.mbti-selection-container h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 15px;
+}
+.mbti-selection-container p {
+    text-align: center;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+.input-group {
+    margin-bottom: 25px;
+}
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-size: 16px;
+    background-color: #fff;
+}
+button {
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+button:hover {
+    background-color: var(--secondary-color);
+}
+button:active {
+    transform: scale(0.98);
+}
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+/* --- チャット画面 --- */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 85vh;
+    max-height: 700px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.chat-header {
+    background: var(--primary-color);
+    color: var(--light-text-color);
+    padding: 15px 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+.chat-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+.progress-container {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    height: 8px;
+    width: 80%;
+    margin: 8px auto 4px;
+}
+.progress-bar {
+    background-color: #fff;
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.3s ease-in-out;
+}
+#turnCounter {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f9fafb;
+}
+
+.message {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+.user-message {
+    background-color: var(--user-message-bg);
+    margin-left: auto;
+    border-bottom-right-radius: 5px;
+    text-align: left;
+}
+
+.bot-message {
+    background-color: var(--bot-message-bg);
+    margin-right: auto;
+    border-bottom-left-radius: 5px;
+    text-align: left;
+}
+
+.bot-message.loading span {
+    display: inline-block;
+    animation: bounce 1s infinite;
+}
+.bot-message.loading span:nth-child(2) { animation-delay: 0.1s; }
+.bot-message.loading span:nth-child(3) { animation-delay: 0.2s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-5px); }
+}
+
+
+.chat-input {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    background: #fff;
+}
+
+#messageInput {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    outline: none;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+#sendButton {
+    width: auto;
+    border-radius: 20px;
+}
+
+
+/* --- 結果表示画面 --- */
+.result-container h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+#resultContent h3 {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+#resultContent h4 {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 5px;
+}
+#reasoningText {
+    line-height: 1.7;
+    white-space: pre-wrap;
+    background-color: #f9fafb;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+#resetButton {
+    margin-top: 25px;
+}

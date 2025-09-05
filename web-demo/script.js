@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messageInput.focus();
 
         // 最初のメッセージをAIから送信
-        const initialBotMessage = `こんにちは！あなたのMBTIは ${selectedMBTI} なのですね。これからいくつか質問をさせてください。準備はいいですか？`;
+        const initialBotMessage = `お話ししましょう．何か話したいことはありますか？`;
         addMessageToUI(initialBotMessage, 'bot');
         conversationHistory.push({ role: 'assistant', content: initialBotMessage });
         updateTurnProgress();

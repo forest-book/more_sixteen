@@ -14,7 +14,7 @@ API_KEY = os.getenv("AZURE_OPENAI_API_KEY", "8cnqswydw7fmj6cBdRTh27JJmWsydcaPpn1
 API_VERSION = "2025-01-01-preview"
 
 # 会話の最大ターン数
-MAX_TURNS = 15
+MAX_TURNS = 10
 
 # ルートURL ("/") にアクセスがあった場合に index.html を返す
 @app.route("/")

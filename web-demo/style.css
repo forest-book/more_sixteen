@@ -3,7 +3,6 @@ body {
     background: #e6e6db;
     margin: 0;
     padding: 20px;
-    height: 100vh;
     font-family: 'Roboto', sans-serif;
     color: #333;
     display: flex;
@@ -56,7 +55,7 @@ body {
     background: #f3f1e7;
     border-radius: 18px;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px; /* Wider for rect-row */
     padding: 32px 24px;
     text-align: center;
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
@@ -77,17 +76,83 @@ body {
     margin-bottom: 25px;
 }
 
-#mbtiType {
-    width: 100%;
-    padding: 15px;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: #fff;
-    margin-bottom: 25px;
-    cursor: pointer;
-    box-sizing: border-box;
+/* Interactive Rectangles Styles from Home.css */
+.rect-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
+
+.interactive-rect {
+    width: 150px;
+    height: 220px;
+    border-radius: 16px;
+    background: #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.interactive-rect:hover {
+    transform: translateY(-5px);
+}
+
+.rect-half {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50%;
+    transition: background-color 0.3s;
+}
+
+.rect-letter {
+    font-size: 3.5rem;
+    font-family: 'Montserrat', Arial, sans-serif;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    transition: opacity 0.3s ease; /* Add transition for opacity */
+}
+
+
+/* New styles for selected/unselected letters */
+.locked-top .rect-bottom .rect-letter,
+.locked-bottom .rect-top .rect-letter {
+    opacity: 0.3;
+}
+
+.locked-top .rect-top .rect-letter,
+.locked-bottom .rect-bottom .rect-letter {
+    opacity: 1;
+}
+
+
+/* Unique profiles for each rectangle */
+.rect1 { background-color: #3498db; }
+.rect1.hover-top, .rect1.locked-top { background: linear-gradient(to bottom, #3498db 60%, #bdc3c7 100%); }
+.rect1.hover-bottom, .rect1.locked-bottom { background: linear-gradient(to top, #27ae60 60%, #bdc3c7 100%); }
+
+.rect2 { background-color: #e67e22; }
+.rect2.hover-top, .rect2.locked-top { background: linear-gradient(to bottom, #e67e22 60%, #bdc3c7 100%); }
+.rect2.hover-bottom, .rect2.locked-bottom { background: linear-gradient(to top, #f1c40f 60%, #bdc3c7 100%); }
+
+.rect3 { background-color: #8e44ad; }
+.rect3.hover-top, .rect3.locked-top { background: linear-gradient(to bottom, #8e44ad 60%, #bdc3c7 100%); }
+.rect3.hover-bottom, .rect3.locked-bottom { background: linear-gradient(to top, #16a085 60%, #bdc3c7 100%); }
+
+.rect4 { background-color: #c0392b; }
+.rect4.hover-top, .rect4.locked-top { background: linear-gradient(to bottom, #c0392b 60%, #bdc3c7 100%); }
+.rect4.hover-bottom, .rect4.locked-bottom { background: linear-gradient(to top, #2980b9 60%, #bdc3c7 100%); }
+
 
 .action-btn {
     padding: 15px 40px;
@@ -101,6 +166,8 @@ body {
     box-shadow: 0 2px 8px rgba(140, 106, 216, 0.2);
     transition: background 0.2s ease;
     width: 100%;
+    max-width: 400px;
+    margin-top: 10px;
     box-sizing: border-box;
 }
 
@@ -108,11 +175,16 @@ body {
     background: #6c4bb6;
 }
 
+.notification-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .notification {
     color: #c0392b;
-    text-align: center;
-    margin-bottom: 15px;
     font-weight: bold;
+    height: 20px; /* Reserve space */
 }
 
 
@@ -122,6 +194,8 @@ body {
     flex-direction: column;
     height: 70vh;
     max-height: 700px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .chat-header {
@@ -245,6 +319,11 @@ body {
 
 
 /* Section 3: Final Result */
+#resultContainer {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 #resultContainer h2 {
     font-family: 'Montserrat', sans-serif;
     color: #8c6ad8;
@@ -260,10 +339,17 @@ body {
 }
 
 /* Media query for smaller screens */
-@media (max-width: 700px) {
+@media (max-width: 768px) {
     .title { font-size: 3rem; }
     .subtitle { font-size: 1.5rem; }
     body { padding: 10px; }
     .main-container { padding: 20px 15px; }
+    .rect-row { gap: 10px; }
+    .interactive-rect { width: calc(50% - 10px); height: 150px; }
+    .rect-letter { font-size: 2.5rem; }
+}
+
+@media (max-width: 480px) {
+    .interactive-rect { width: calc(50% - 5px); gap: 5px; }
 }
 

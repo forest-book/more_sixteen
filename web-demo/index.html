@@ -20,29 +20,31 @@
 
     <!-- Main application container -->
     <div class="main-container">
-        <!-- Section 1: MBTI Type Selection -->
+        <!-- Section 1: MBTI Type Selection (Updated with interactive rectangles) -->
         <div id="mbtiSelection">
             <h2>あなたのMBTIタイプは？</h2>
-            <p>AIとの雑談を通じて、あなたの内なる声に耳を傾けてみましょう。</p>
-            <select id="mbtiType">
-                <option value="">16タイプから選択してください</option>
-                <option value="INTJ">INTJ（建築家）</option>
-                <option value="INTP">INTP（論理学者）</option>
-                <option value="ENTJ">ENTJ（指揮官）</option>
-                <option value="ENTP">ENTP（討論者）</option>
-                <option value="INFJ">INFJ（提唱者）</option>
-                <option value="INFP">INFP（仲介者）</option>
-                <option value="ENFJ">ENFJ（主人公）</option>
-                <option value="ENFP">ENFP（広報運動家）</option>
-                <option value="ISTJ">ISTJ（管理者）</option>
-                <option value="ISFJ">ISFJ（擁護者）</option>
-                <option value="ESTJ">ESTJ（幹部）</option>
-                <option value="ESFJ">ESFJ（領事）</option>
-                <option value="ISTP">ISTP（巨匠）</option>
-                <option value="ISFP">ISFP（冒険家）</option>
-                <option value="ESTP">ESTP（起業家）</option>
-                <option value="ESFP">ESFP（エンターテイナー）</option>
-            </select>
+            <p>4つの指標を選択して、あなた自身を表現してください。</p>
+            <div class="rect-row">
+                <div class="interactive-rect rect1" id="interactiveRect1" data-custom-top="E" data-custom-bottom="I">
+                    <div class="rect-half rect-top"><span class="rect-letter">E</span></div>
+                    <div class="rect-half rect-bottom"><span class="rect-letter">I</span></div>
+                </div>
+                <div class="interactive-rect rect2" id="interactiveRect2" data-custom-top="N" data-custom-bottom="S">
+                    <div class="rect-half rect-top"><span class="rect-letter">N</span></div>
+                    <div class="rect-half rect-bottom"><span class="rect-letter">S</span></div>
+                </div>
+                <div class="interactive-rect rect3" id="interactiveRect3" data-custom-top="T" data-custom-bottom="F">
+                    <div class="rect-half rect-top"><span class="rect-letter">T</span></div>
+                    <div class="rect-half rect-bottom"><span class="rect-letter">F</span></div>
+                </div>
+                <div class="interactive-rect rect4" id="interactiveRect4" data-custom-top="J" data-custom-bottom="P">
+                    <div class="rect-half rect-top"><span class="rect-letter">J</span></div>
+                    <div class="rect-half rect-bottom"><span class="rect-letter">P</span></div>
+                </div>
+            </div>
+             <div class="notification-container" style="height: 20px;">
+                <div class="notification" id="selectionNotification"></div>
+            </div>
             <button id="startChatButton" class="action-btn">診断を開始する</button>
         </div>
 

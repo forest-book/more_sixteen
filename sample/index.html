@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MBTIチャット診断</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="chat-container">
+      <div class="user-bar">
+        <div class="avatar">
+          <img src="https://rakuraku-site.prodouga.com/img/RakuRaku.avif" alt="ラク子さん">
+        </div>
+        <div class="name">
+          <span>MBTI診断AI</span>
+          <span class="status">オンライン</span>
+        </div>
+      </div>
+      <div class="chat-messages" id="messageArea">
+        <!-- メッセージがここに表示されます -->
+      </div>
+      <div class="chat-input">
+        <input id="messageInput" type="text" placeholder="メッセージを入力" autocomplete="off" autofocus>
+        <button id="sendButton"><i class="fa fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

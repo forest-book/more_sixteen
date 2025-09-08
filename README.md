@@ -8,7 +8,7 @@
 
 ## ディレクトリ構成
 
-web-demo/
+web-demo
 ├── app.py          # Flaskバックエンドサーバー
 ├── index.html      # フロントエンドのメインページ
 ├── style.css       # スタイルシート
